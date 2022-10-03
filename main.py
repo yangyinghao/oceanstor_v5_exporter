@@ -43,6 +43,8 @@ class Store_info:
         if self.login_status == 1:
             self.system()
             self.controller()
+            self.expboard()
+            self.intf_module()
             self.logout()
 
     def login(self):
@@ -90,6 +92,30 @@ class Store_info:
         try:
             response = self.r.get(url, headers=self.headers, verify=False)
             logging.info("查询控制器信息成功")
+            info = json.loads(response.text)['data']
+            logging.debug(info)
+        except Exception:
+            logging.error("系统异常")
+
+    def expboard(self):
+        logging.info("查询级联板信息")
+        url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/expboard"
+        logging.debug("调用URL：" + url)
+        try:
+            response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询级联板信息成功")
+            info = json.loads(response.text)['data']
+            logging.debug(info)
+        except Exception:
+            logging.error("系统异常")
+
+    def intf_module(self):
+        logging.info("查询接口模块信息")
+        url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/intf_module"
+        logging.debug("调用URL：" + url)
+        try:
+            response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询接口模块信息成功")
             info = json.loads(response.text)['data']
             logging.debug(info)
         except Exception:
