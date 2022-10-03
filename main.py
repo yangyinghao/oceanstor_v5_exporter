@@ -45,6 +45,7 @@ class Store_info:
             self.controller()
             self.expboard()
             self.intf_module()
+            self.disk()
             self.logout()
 
     def login(self):
