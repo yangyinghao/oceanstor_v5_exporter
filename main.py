@@ -46,6 +46,9 @@ class Store_info:
             self.expboard()
             self.intf_module()
             self.disk()
+            self.power()
+            self.backup_power()
+            self.fan()
             self.logout()
 
     def login(self):
@@ -129,6 +132,43 @@ class Store_info:
         try:
             response = self.r.get(url, headers=self.headers, verify=False)
             logging.info("查询硬盘的基本信息成功")
+            info = json.loads(response.text)['data']
+            logging.debug(info)
+        except Exception:
+            logging.error("系统异常")
+
+
+    def power(self):
+        logging.info("查询电源的基本信息")
+        url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/power"
+        logging.debug("调用URL：" + url)
+        try:
+            response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询电源的基本信息成功")
+            info = json.loads(response.text)['data']
+            logging.debug(info)
+        except Exception:
+            logging.error("系统异常")
+
+    def backup_power(self):
+        logging.info("查询备电模块的基本信息")
+        url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/backup_power"
+        logging.debug("调用URL：" + url)
+        try:
+            response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询备电模块的基本信息成功")
+            info = json.loads(response.text)['data']
+            logging.debug(info)
+        except Exception:
+            logging.error("系统异常")
+
+    def fan(self):
+        logging.info("查询风扇的基本信息")
+        url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/fan"
+        logging.debug("调用URL：" + url)
+        try:
+            response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询风扇的基本信息成功")
             info = json.loads(response.text)['data']
             logging.debug(info)
         except Exception:
