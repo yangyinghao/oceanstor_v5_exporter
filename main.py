@@ -3,6 +3,7 @@ import json
 import logging
 import requests
 import http.cookiejar as cj
+import uuid
 
 from urllib3.exceptions import InsecureRequestWarning
 
@@ -27,19 +28,22 @@ Store_Password = "1qazXSW@3edc"
 class Store_info:
 
     def __init__(self):
+        self.uuid = str(uuid.uuid4())
         self.Store_Host = Store_Host
         self.Store_Port = Store_Port
         self.Store_UserName = Store_UserName
         self.Store_Password = Store_Password
         self.deviceId = None
-        self.iBaseToken = None
         self.login_status = 0
         self.headers = {'Content-Type': 'application/json'}
         self.r = requests.session()
         self.r.cookies = cj.LWPCookieJar()
+        logging.info("巡检任务：" + self.uuid)
         self.login()
-        self.system()
-        self.logout()
+        if self.login_status == 1:
+            self.system()
+            self.controller()
+            self.logout()
 
     def login(self):
         logging.info("存储地址：" + self.Store_Host)
@@ -55,8 +59,8 @@ class Store_info:
             if response["data"]["accountstate"] == 1:
                 logging.info("登录成功")
                 self.deviceId = response["data"]["deviceid"]
-                self.iBaseToken = response["data"]["iBaseToken"]
-                self.headers = {'Content-Type': 'application/json', "iBaseToken": self.iBaseToken}
+                iBaseToken = response["data"]["iBaseToken"]
+                self.headers = {'Content-Type': 'application/json', "iBaseToken": iBaseToken}
                 self.login_status = 1
                 logging.info("设备ID：" + response["data"]["deviceid"])
                 logging.info("登录用户：" + response["data"]["username"])
@@ -64,16 +68,28 @@ class Store_info:
                 logging.info("上次登录IP：" + response["data"]["lastloginip"])
             else:
                 logging.error("登录失败")
-
         except Exception:
             logging.error("系统异常")
 
     def system(self):
-        logging.info("获取系统基础信息")
+        logging.info("查询系统基本信息")
         url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/system/"
         logging.debug("调用URL：" + url)
         try:
             response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询系统基本信息成功")
+            info = json.loads(response.text)['data']
+            logging.debug(info)
+        except Exception:
+            logging.error("系统异常")
+
+    def controller(self):
+        logging.info("查询控制器信息")
+        url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/controller"
+        logging.debug("调用URL：" + url)
+        try:
+            response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询控制器信息成功")
             info = json.loads(response.text)['data']
             logging.debug(info)
         except Exception:
