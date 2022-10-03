@@ -121,6 +121,19 @@ class Store_info:
         except Exception:
             logging.error("系统异常")
 
+    def disk(self):
+        logging.info("查询硬盘的基本信息")
+        url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/disk"
+        logging.debug("调用URL：" + url)
+        try:
+            response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询硬盘的基本信息成功")
+            info = json.loads(response.text)['data']
+            logging.debug(info)
+        except Exception:
+            logging.error("系统异常")
+
+
     def logout(self):
         url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/sessions"
         logging.debug("调用URL：" + url)
