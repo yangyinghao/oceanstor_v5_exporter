@@ -37,7 +37,8 @@ class Store:
             backup_power = self.backup_power()
             fan = self.fan()
             self.logout()
-            self.Store_Info = {"system": system, "controller": controller, "expboard": expboard,
+            self.Store_Info = {"updatetime": int(datetime.now().timestamp()), "system": system,
+                               "controller": controller, "expboard": expboard,
                                "intf_module": intf_module,
                                "disk": disk,
                                "power": power, "backup_power": backup_power, "fan": fan}
@@ -81,7 +82,7 @@ class Store:
             logging.info("查询系统基本信息成功")
             info = json.loads(response.text)["data"]
             logging.debug(response.text)
-            return None
+            return info
         except Exception as e:
             logging.error("系统异常")
             logging.error(e)
@@ -96,7 +97,7 @@ class Store:
             logging.info("查询控制器信息成功")
             info = json.loads(response.text)['data']
             logging.debug(response.text)
-            return None
+            return info
         except Exception as e:
             logging.error("系统异常")
             logging.error(e)
@@ -111,7 +112,7 @@ class Store:
             logging.info("查询级联板信息成功")
             info = json.loads(response.text)['data']
             logging.debug(response.text)
-            return None
+            return info
         except Exception as e:
             logging.error("系统异常")
             logging.error(e)
@@ -126,7 +127,7 @@ class Store:
             logging.info("查询接口模块信息成功")
             info = json.loads(response.text)['data']
             logging.debug(response.text)
-            return None
+            return info
         except Exception as e:
             logging.error("系统异常")
             logging.error(e)
@@ -141,7 +142,7 @@ class Store:
             logging.info("查询硬盘的基本信息成功")
             info = json.loads(response.text)['data']
             logging.debug(response.text)
-            return None
+            return info
         except Exception as e:
             logging.error("系统异常")
             logging.error(e)
@@ -156,7 +157,7 @@ class Store:
             logging.info("查询电源的基本信息成功")
             info = json.loads(response.text)['data']
             logging.debug(response.text)
-            return None
+            return info
         except Exception as e:
             logging.error("系统异常")
             logging.error(e)
@@ -171,7 +172,7 @@ class Store:
             logging.info("查询备电模块的基本信息成功")
             info = json.loads(response.text)['data']
             logging.debug(response.text)
-            return None
+            return info
         except Exception as e:
             logging.error("系统异常")
             logging.error(e)
@@ -186,7 +187,7 @@ class Store:
             logging.info("查询风扇的基本信息成功")
             info = json.loads(response.text)['data']
             logging.debug(response.text)
-            return None
+            return info
         except Exception as e:
             logging.error("系统异常")
             logging.error(e)
