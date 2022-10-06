@@ -29,6 +29,7 @@ class Store:
         self.login()
         if self.login_status == 1:
             system = self.system()
+            enclosure = self.enclosure()
             controller = self.controller()
             expboard = self.expboard()
             intf_module = self.intf_module()
@@ -38,7 +39,7 @@ class Store:
             fan = self.fan()
             self.logout()
             self.Store_Info = {"store_host": self.Store_Host, "updatetime": int(datetime.now().timestamp()),
-                               "system": system, "controller": controller, "expboard": expboard,
+                               "system": system, "enclosure": enclosure, "controller": controller, "expboard": expboard,
                                "intf_module": intf_module, "disk": disk, "power": power, "backup_power": backup_power,
                                "fan": fan}
             logging.debug(self.Store_Info)
@@ -80,6 +81,21 @@ class Store:
             response = self.r.get(url, headers=self.headers, verify=False)
             logging.info("查询系统基本信息成功")
             info = json.loads(response.text)["data"]
+            logging.debug(response.text)
+            return info
+        except Exception as e:
+            logging.error("系统异常")
+            logging.error(e)
+            return "Error"
+
+    def enclosure(self):
+        logging.info("查询机框信息")
+        url = "https://" + self.Store_Host + ":" + self.Store_Port + "/deviceManager/rest/" + self.deviceId + "/enclosure"
+        logging.debug("调用URL：" + url)
+        try:
+            response = self.r.get(url, headers=self.headers, verify=False)
+            logging.info("查询机框信息成功")
+            info = json.loads(response.text)['data']
             logging.debug(response.text)
             return info
         except Exception as e:
