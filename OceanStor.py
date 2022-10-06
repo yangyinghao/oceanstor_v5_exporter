@@ -37,11 +37,10 @@ class Store:
             backup_power = self.backup_power()
             fan = self.fan()
             self.logout()
-            self.Store_Info = {"updatetime": int(datetime.now().timestamp()), "system": system,
-                               "controller": controller, "expboard": expboard,
-                               "intf_module": intf_module,
-                               "disk": disk,
-                               "power": power, "backup_power": backup_power, "fan": fan}
+            self.Store_Info = {"store_host": self.Store_Host, "updatetime": int(datetime.now().timestamp()),
+                               "system": system, "controller": controller, "expboard": expboard,
+                               "intf_module": intf_module, "disk": disk, "power": power, "backup_power": backup_power,
+                               "fan": fan}
             logging.debug(self.Store_Info)
 
         return self.Store_Info
